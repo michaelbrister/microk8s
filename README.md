@@ -141,10 +141,45 @@ spec:
           service:
             name: gitea-service
             port:
-              number: 80 
+              number: 80
 ```
 
-### Apply the ingress-gitea.yaml file
+Apply the ingress-gitea.yaml file
 ```
 microk8s kubectl apply -f ingress-gitea.yaml
+```
+
+### Monitoring
+Things are running, let's add ingress for prometheus and grafana ( monitoring is important )
+Create an ingress file for prometheus
+ingress-promethues.yaml
+```
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: prometheus 
+  namespace: monitoring 
+  annotations:
+    # use the shared ingress-nginx
+    kubernetes.io/ingress.class: public
+spec:
+  # https://kubernetes.io/docs/concepts/services-networking/ingress/
+  # https://kubernetes.github.io/ingress-nginx/user-guide/tls/
+  rules:
+  - host: prometheus.brister.lan
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: prometheus-k8s
+            port:
+              number: 80
+```
+
+Apply the ingress-prometheus.yaml file
+```
+microk8s kubectl apply -f ingress-prometheus.yaml
 ```
