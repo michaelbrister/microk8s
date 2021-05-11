@@ -115,7 +115,7 @@ helm upgrade -f values.yaml gitea -n gitea gitea-charts/gitea
 microk8s kubectl get pods -n gitea
 ```
 
-### Now that we have gitae running
+### Now that we have gitea running
 Let's create an ingress controller so that we can access it.
 Create an ingress-gitea.yaml file 
 ```
