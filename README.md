@@ -26,7 +26,7 @@ spec:
         image: k8s.gcr.io/kubernetes-dashboard-amd64:v1.10.1
 ```
 
-### Create dashboard ingress
+### Create kubernetes dashboard ingress
 Now that we have the Kubernetes dashboard installed and we have the token ( or bypassed the need for the token ). Let's create a kubernetes ingress so we can access the dashboard.
 Create a ingress-dashboard.yaml yaml file
 
