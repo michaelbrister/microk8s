@@ -158,7 +158,7 @@ microk8s kubectl apply -f ingress-gitea.yaml
 ### Monitoring
 Things are running, let's add ingress for prometheus ( monitoring is important )
 Create an ingress file for prometheus
-ingress-promethues.yaml
+ingress-monitoring.yaml
 ```
 ---
 apiVersion: networking.k8s.io/v1
@@ -180,12 +180,35 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: prometheus-k8s
+            name: prometheus-k8s 
             port:
-              number: 80
+              number: 9090 
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: grafana 
+  namespace: monitoring 
+  annotations:
+    # use the shared ingress-nginx
+    kubernetes.io/ingress.class: public
+spec:
+  # https://kubernetes.io/docs/concepts/services-networking/ingress/
+  # https://kubernetes.github.io/ingress-nginx/user-guide/tls/
+  rules:
+  - host: grafana.brister.lan
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: grafana 
+            port:
+              number: 3000 
 ```
 
-Apply the ingress-prometheus.yaml file
+Apply the ingress-monitoring.yaml file
 ```
-microk8s kubectl apply -f ingress-prometheus.yaml
+microk8s kubectl apply -f ingress-monitoring.yaml
 ```
