@@ -73,6 +73,8 @@ http://x.x.x.x/dashboard
 Now that we have the dashboard working, let's install someone more useful.
 We'll be using helm to install gitea. Gitea is a community managed lightweight code hosting solution written in Go.
 First we'll be creating a dedicated namespace in which we will be installing gitea
+https://docs.gitea.io/en-us/install-on-kubernetes/
+
 ```
 microk8s kubectl create namespace gitea
 ```
