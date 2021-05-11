@@ -117,6 +117,12 @@ microk8s kubectl get pods -n gitea
 
 ### Now that we have gitea running
 Let's create an ingress controller so that we can access it.
+
+First we need to get the name of the service we're adding to the ingress controller
+```
+microk8s kubectl get svc -n gitea
+```
+
 Create an ingress-gitea.yaml file 
 ```
 ---
@@ -139,7 +145,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: gitea-service
+            name: gitea-http
             port:
               number: 80
 ```
@@ -150,7 +156,7 @@ microk8s kubectl apply -f ingress-gitea.yaml
 ```
 
 ### Monitoring
-Things are running, let's add ingress for prometheus and grafana ( monitoring is important )
+Things are running, let's add ingress for prometheus ( monitoring is important )
 Create an ingress file for prometheus
 ingress-promethues.yaml
 ```
