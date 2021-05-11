@@ -1,18 +1,19 @@
 # Guide to getting up and running with microk8s
 
-## Install microk8s
+### Install microk8s
 sudo snap install microk8s --classic
 
-## Enable microk8s add-ons
+### Enable microk8s add-ons
 microk8s enable dashboard dns helm3 ingress metallb metrics-server prometheus registry storage
 
-## Get the microk8s kubernetes dashboard token
+### Get the microk8s kubernetes dashboard token
 ```
 token=$(microk8s.kubectl -n kube-system get secret | grep default-token | cut -d " " -f1)
 microk8s.kubectl -n kube-system describe secret $token
 ```
 
-## Alternatively, edit kubernetes dashboard to have the - --enable-skip-login set so the token is not required
+### Alternatively
+Edit kubernetes dashboard to have the - --enable-skip-login set so the token is not required
 ```
 microk8s.kubectl edit deployment/kubernetes-dashboard --namespace=kube-system
 and add enable-skip-login as below:
@@ -26,7 +27,7 @@ spec:
 "/tmp/kubectl-edit-snu9z.yaml" 102L, 4077C    
 ```
 
-## Create dashboard ingress
+### Create dashboard ingress
 Now that we have the Kubernetes dashboard installed and we have the token ( or bypassed the need for the token ). Let's create a kubernetes ingress so we can access the dashboard.
 Create a ingress-dashboard.yaml yaml file
 
@@ -59,12 +60,12 @@ spec:
               number: 443
 ```
 
-## Apply the dashboard ingress
+### Apply the dashboard ingress
 ```
 microk8s kubectl apply -f ingress-dashboard.yaml
 ```
 
-## Access the kubernetes dashboard
+### Access the kubernetes dashboard
 You should now be able to access the dashboard by going to the microk8s server ip /dashboard
 ```
 http://x.x.x.x/dashboard
@@ -77,18 +78,18 @@ First we'll be creating a dedicated namespace in which we will be installing git
 microk8s kubectl create namespace gitea
 ```
 
-## Add gitea helm chart
+### Add gitea helm chart
 Next we will be adding the helm charts
 ```
 helm repo add gitea-charts https://dl.gitea.io/charts/
 helm install gitea -n gitea gitea-charts/gitea
 ```
-## Export the gitea helm values so we can update them.
+### Export the gitea helm values so we can update them.
 ```
 helm show values gitea-charts/gitea > gitea-values.yaml
 ```
 
-## Edit gitea chart values file
+### Edit gitea chart values file
 Edit the gitea-values.yaml file to turn on ingress ( example ingress section shown below )
 ```
 ingress:
@@ -103,17 +104,18 @@ ingress:
   #    hosts:
   #      - git.example.com
 ```
-## Apply the updated gitea-values.yaml file
+### Apply the updated gitea-values.yaml file
 ```
 helm upgrade -f values.yaml gitea -n gitea gitea-charts/gitea
 ```
 
-## Check if gitea is running
+### Check if gitea is running
 ```
 microk8s kubectl get pods -n gitea
 ```
 
-## Now that we have gitae running, let's create an ingress controller so that we can access it.
+### Now that we have gitae running
+Let's create an ingress controller so that we can access it.
 Create an ingress-gitea.yaml file 
 ```
 ---
@@ -141,7 +143,7 @@ spec:
               number: 80 
 ```
 
-##Apply the ingress-gitea.yaml file
+### Apply the ingress-gitea.yaml file
 ```
 microk8s kubectl apply -f ingress-gitea.yaml
 ```
