@@ -14,10 +14,10 @@ microk8s.kubectl -n kube-system describe secret $token
 
 ### Alternatively
 Edit kubernetes dashboard to have the - --enable-skip-login set so the token is not required
-```
+
 microk8s.kubectl edit deployment/kubernetes-dashboard --namespace=kube-system
 and add enable-skip-login as below:
-
+```
 spec:
       containers:
       - args:
