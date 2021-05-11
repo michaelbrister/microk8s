@@ -1,4 +1,4 @@
-# Getting up and running with microk8s on Ubuntu 20.04
+# Microk8s up and running on Ubuntu 20.04
 
 ### Install microk8s
 sudo snap install microk8s --classic
