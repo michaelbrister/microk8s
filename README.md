@@ -24,7 +24,6 @@ spec:
         - --auto-generate-certificates
         - --enable-skip-login
         image: k8s.gcr.io/kubernetes-dashboard-amd64:v1.10.1
-"/tmp/kubectl-edit-snu9z.yaml" 102L, 4077C    
 ```
 
 ### Create dashboard ingress
