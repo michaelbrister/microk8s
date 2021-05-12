@@ -15,6 +15,9 @@ microk8s enable dashboard dns helm3 ingress metallb metrics-server prometheus re
 token=$(microk8s.kubectl -n kube-system get secret | grep default-token | cut -d " " -f1)
 microk8s.kubectl -n kube-system describe secret $token
 ```
+```
+kubectl describe secrets -n ni-system kubernetes-dashboard-token-c2chm
+```
 
 ### Alternatively
 Edit kubernetes dashboard to have the - --enable-skip-login set so the token is not required
