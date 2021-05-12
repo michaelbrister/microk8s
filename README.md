@@ -4,6 +4,12 @@
 sudo snap install microk8s --classic
 
 ### Create some command line alias
+snap alias microk8s.kubectl kubectl
+snap alias microk8s.helm3 helm
+snap alias microk8s.istioctl istioctl
+
+OR
+
 alias kubectl='microk8s kubectl'
 alias helm='microk8s helm3'
 
