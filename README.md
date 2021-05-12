@@ -3,6 +3,10 @@
 ### Install microk8s
 sudo snap install microk8s --classic
 
+### Create some command line alias
+alias kubectl='microk8s kubectl'
+alias helm='microk8s helm3'
+
 ### Enable microk8s add-ons
 microk8s enable dashboard dns helm3 ingress metallb metrics-server prometheus registry storage
 
@@ -15,7 +19,7 @@ microk8s.kubectl -n kube-system describe secret $token
 ### Alternatively
 Edit kubernetes dashboard to have the - --enable-skip-login set so the token is not required
 
-microk8s.kubectl edit deployment/kubernetes-dashboard --namespace=kube-system
+kubectl edit deployment/kubernetes-dashboard --namespace=kube-system
 and add enable-skip-login as below:
 ```
 spec:
@@ -61,7 +65,7 @@ spec:
 
 ### Apply the dashboard ingress
 ```
-microk8s kubectl apply -f ingress-dashboard.yaml
+kubectl apply -f ingress-dashboard.yaml
 ```
 
 ### Access the kubernetes dashboard
@@ -76,7 +80,7 @@ First we'll be creating a dedicated namespace in which we will be installing git
 https://docs.gitea.io/en-us/install-on-kubernetes/
 
 ```
-microk8s kubectl create namespace gitea
+kubectl create namespace gitea
 ```
 
 ### Add gitea helm chart
@@ -112,7 +116,7 @@ helm upgrade -f values.yaml gitea -n gitea gitea-charts/gitea
 
 ### Check if gitea is running
 ```
-microk8s kubectl get pods -n gitea
+kubectl get pods -n gitea
 ```
 
 ### Now that we have gitea running
@@ -120,7 +124,7 @@ Let's create an ingress controller so that we can access it.
 
 First we need to get the name of the service we're adding to the ingress controller
 ```
-microk8s kubectl get svc -n gitea
+kubectl get svc -n gitea
 ```
 
 Create an ingress-gitea.yaml file 
@@ -152,7 +156,7 @@ spec:
 
 Apply the ingress-gitea.yaml file
 ```
-microk8s kubectl apply -f ingress-gitea.yaml
+kubectl apply -f ingress-gitea.yaml
 ```
 
 ### Monitoring
@@ -210,5 +214,5 @@ spec:
 
 Apply the ingress-monitoring.yaml file
 ```
-microk8s kubectl apply -f ingress-monitoring.yaml
+kubectl apply -f ingress-monitoring.yaml
 ```
