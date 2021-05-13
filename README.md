@@ -13,6 +13,9 @@ OR
 alias kubectl='microk8s kubectl'
 alias helm='microk8s helm3'
 
+Update the .kube/config
+sudo microk8s config > ~/.kube/config
+
 ### Enable microk8s add-ons
 microk8s enable dashboard dns helm3 ingress metallb metrics-server prometheus registry storage
 
