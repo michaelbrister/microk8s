@@ -27,8 +27,9 @@ kubectl describe secrets -n ni-system kubernetes-dashboard-token-c2chm
 
 ### Alternatively
 Edit kubernetes dashboard to have the - --enable-skip-login set so the token is not required
-
+```
 kubectl edit deployment/kubernetes-dashboard --namespace=kube-system
+```
 and add enable-skip-login as below:
 ```
 spec:
