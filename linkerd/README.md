@@ -44,6 +44,7 @@ linkerd check
 Step 4: Explore Linkerd
 To do this we'll be exposing the dashboard via an ingress.
 Create a ingress-linkerd.yaml yaml file
+( Username / Password is admin/admin )
 ```
 apiVersion: v1
 kind: Secret
