@@ -9,9 +9,10 @@ https://github.com/sighupio/permission-manager/blob/master/docs/installation.md
 kubectl create namespace permission-manager
 ```
 
-## Instal
+## Install
 To install permission-manager we'll be using the helm chart in this repo.
-The values file has implementation specific configurations. Any changes for your environment should be made there.
+Download this chart to your local computer. 
+Make any necessary changes to for your specific environment. Any changes for your environment should be made there.
 ```
 helm install -n permission-manager permission-manager -f values .
 ```
