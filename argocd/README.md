@@ -9,11 +9,6 @@ kubectl create namespace argocd
 ```
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 ```
-### Get the default password for ArgoCD
-```
-kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
-```
-
 Create an ingress-argocd.yaml file 
 ```
 apiVersion: networking.k8s.io/v1
@@ -46,4 +41,8 @@ spec:
 Apply the ingress-argocd.yaml file
 ```
 kubectl apply -f ingress-argocd.yaml
+```
+### Get the default password for ArgoCD
+```
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d && echo
 ```
