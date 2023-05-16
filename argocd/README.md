@@ -15,7 +15,8 @@ kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.pas
 ```
 
 Create an ingress-argocd.yaml file 
-```apiVersion: networking.k8s.io/v1
+```
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: argocd-server-http-ingress
