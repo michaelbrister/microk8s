@@ -1,3 +1,4 @@
+---
 name: CI
 
 on:
@@ -27,7 +28,6 @@ jobs:
             --verbose
             --no-progress
             --accept 200,429
-            --exclude-mail
             .
           fail: true
 

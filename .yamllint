@@ -1,10 +1,13 @@
+---
 extends: default
 
 ignore: |
-  permission-manager/templates/*.yaml
-  permission-manager/templates/*.yml
-  permission-manager/templates/*.tpl
+  permission-manager/templates/**
 
 rules:
+  comments-indentation: disable
+  truthy:
+    ignore: |
+      .github/workflows/*.yml
   line-length:
     max: 100
