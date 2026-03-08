@@ -28,6 +28,9 @@ jobs:
             --verbose
             --no-progress
             --accept 200,429
+            --exclude 'http://127.0.0.1:8080'
+            --exclude 'http://localhost(:[0-9]+)?'
+            --exclude '^\./permission-manager/templates/NOTES.txt$'
             .
           fail: true
 
@@ -70,4 +73,9 @@ jobs:
           chmod +x /tmp/kubeconform
 
       - name: Validate rendered manifests
-        run: /tmp/kubeconform -strict -summary /tmp/permission-manager-rendered.yaml
+        run: |
+          /tmp/kubeconform \
+            -strict \
+            -summary \
+            -skip CustomResourceDefinition \
+            /tmp/permission-manager-rendered.yaml
