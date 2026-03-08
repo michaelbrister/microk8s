@@ -1,0 +1,18 @@
+ingress:
+  enabled: true
+  className: nginx
+  annotations: {}
+  hosts:
+    - host: git.example.internal
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: gitea-tls
+      hosts:
+        - git.example.internal
+
+persistence:
+  enabled: true
+  storageClass: microk8s-hostpath
+  size: 10Gi

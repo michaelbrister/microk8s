@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: code-server
+  namespace: code-server
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - code.example.internal
+      secretName: code-server-tls
+  rules:
+    - host: code.example.internal
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: code-server
+                port:
+                  number: 8080

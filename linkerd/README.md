@@ -1,89 +1,185 @@
-# Linkerd up and running on Ubuntu 20.04 with Microk8s
-Many of these steps were taken directly from the official linkerd getting started guide
-https://linkerd.io/2.10/getting-started/#step-2-validate-your-kubernetes-cluster
+# Linkerd on MicroK8s
 
-### Install the Linkerd CLI
-```
-curl -sL https://run.linkerd.io/install | sh
-```
-Once installed, verify the CLI is running correctly with:
-```
+This guide installs Linkerd and the Viz extension, then exposes the dashboard
+using either port-forwarding or a separately managed ingress.
+
+## Overview
+
+Linkerd is a service mesh for Kubernetes. The most reliable first install path
+is to validate the cluster, install the control plane, install Viz, and verify
+health before exposing any UI.
+
+## Prerequisites
+
+- A working MicroK8s cluster
+- `kubectl` pointed at that cluster
+- A Linkerd CLI version compatible with the control plane you plan to install
+- Ingress enabled only if you want browser access without port-forwarding
+- A hostname reserved for the dashboard such as `linkerd.example.internal`
+
+## Install
+
+Install the Linkerd CLI using the current upstream method for your platform,
+then confirm it works:
+
+```bash
 linkerd version
 ```
 
-Step 2: Validate your Kubernetes cluster
-```
+Validate the cluster before installation:
+
+```bash
 linkerd check --pre
 ```
 
-Step 3: Install the control plane onto your cluster
-```
+Install the control plane:
+
+```bash
 linkerd install | kubectl apply -f -
 ```
 
-Now let’s wait for the control plane to finish installing. Wait for the control plane to be ready (and verify your installation) by running:
-```
+Verify the control plane:
+
+```bash
 linkerd check
 ```
 
-Next, we’ll install some extensions. Extensions add non-critical but often useful functionality to Linkerd. For this guide, we need the viz extension, which will install Prometheus, dashboard, and metrics components onto the cluster:
-```
-linkerd viz install | kubectl apply -f - # on-cluster metrics stack
-```
-Optionally, at this point you can install other extensions. For example:
-```
-## optional
-linkerd jaeger install | kubectl apply -f - # Jaeger collector and UI
+Install the Viz extension:
+
+```bash
+linkerd viz install | kubectl apply -f -
 ```
 
-Once you’ve installed the viz extension and any other extensions you’d like, we’ll validate everything again:
-```
+Verify again after Viz is installed:
+
+```bash
 linkerd check
+linkerd viz check
 ```
 
-Step 4: Explore Linkerd
-To do this we'll be exposing the dashboard via an ingress.
-Create a ingress-linkerd.yaml yaml file
-( Username / Password is admin/admin )
+Optional extensions such as Jaeger should be added only after the base install
+is healthy.
+
+## Expose
+
+### Option A: local access with port-forward
+
+This is the preferred default:
+
+```bash
+linkerd viz dashboard
 ```
-apiVersion: v1
-kind: Secret
-type: Opaque
-metadata:
-  name: web-ingress-auth
-  namespace: linkerd-viz
-data:
-  auth: YWRtaW46JGFwcjEkbjdDdTZnSGwkRTQ3b2dmN0NPOE5SWWpFakJPa1dNLgoK
----
+
+If you want raw access to the web service instead:
+
+```bash
+kubectl port-forward svc/web -n linkerd-viz 50750:8084
+```
+
+### Option B: ingress
+
+If you need stable internal access, create an ingress manifest and provide your
+own authentication and TLS. Do not use a hard-coded `admin/admin` secret.
+
+Reference example:
+
+- [`examples/linkerd/ingress-linkerd.yaml`](/Users/mike/Documents/src/microk8s/examples/linkerd/ingress-linkerd.yaml)
+
+Example `ingress-linkerd.yaml`:
+
+```yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: web-ingress
+  name: linkerd-viz
   namespace: linkerd-viz
-  annotations:
-    kubernetes.io/ingress.class: public
-    nginx.ingress.kubernetes.io/upstream-vhost: $service_name.$namespace.svc.cluster.local:8084
-    nginx.ingress.kubernetes.io/configuration-snippet: |
-      proxy_set_header Origin "";
-      proxy_hide_header l5d-remote-ip;
-      proxy_hide_header l5d-server-id;
-    nginx.ingress.kubernetes.io/auth-type: basic
-    nginx.ingress.kubernetes.io/auth-secret: web-ingress-auth
-    nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required'
 spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - linkerd.example.internal
+      secretName: linkerd-viz-tls
   rules:
-  - host: linkerd.brister.lan
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: web
-            port:
-              number: 8084
+    - host: linkerd.example.internal
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: web
+                port:
+                  number: 8084
 ```
-Apply the dashboard ingress
-```
+
+Apply it:
+
+```bash
 kubectl apply -f ingress-linkerd.yaml
 ```
+
+Notes:
+
+- The exact ingress annotations you need depend on your controller and how you
+  handle auth headers and TLS termination.
+- Keep dashboard exposure limited to trusted networks unless you have a clear
+  identity and TLS story.
+
+## Verify
+
+Confirm the Linkerd namespaces are healthy:
+
+```bash
+kubectl get pods -n linkerd
+kubectl get pods -n linkerd-viz
+linkerd check
+linkerd viz check
+```
+
+Inspect the dashboard service:
+
+```bash
+kubectl get svc web -n linkerd-viz
+kubectl get ingress -n linkerd-viz
+```
+
+## Operate
+
+Common day-two commands:
+
+```bash
+linkerd stat deployments -A
+linkerd viz top deploy -A
+kubectl logs -n linkerd deploy/linkerd-destination
+```
+
+Keep the CLI and control plane versions aligned when you upgrade.
+
+## Remove
+
+Remove the ingress if you created one:
+
+```bash
+kubectl delete -f ingress-linkerd.yaml
+```
+
+Remove Viz:
+
+```bash
+linkerd viz uninstall | kubectl delete -f -
+```
+
+Remove the control plane:
+
+```bash
+linkerd uninstall | kubectl delete -f -
+```
+
+## Troubleshooting
+
+- If `linkerd check --pre` fails, fix those cluster issues before applying any
+  manifests.
+- If Viz installs but the dashboard is empty, verify that metrics components
+  are healthy in `linkerd-viz`.
+- If ingress access fails, test the dashboard with `linkerd viz dashboard`
+  first so you can separate application health from ingress problems.

@@ -41,17 +41,17 @@ service:
   port: 4000
 
 ingress:
-  enabled: true 
-  annotations: 
-    kubernetes.io/ingress.class: public
+  enabled: true
+  className: nginx
+  annotations: {}
   hosts:
     - host: permissions.example.com
       paths:
         - /
- # tls:  
- #   - secretName: permission-tls
- #     hosts:
- #       - domain.com 
+  tls: []
+ #  - secretName: permission-tls
+ #    hosts:
+ #      - permissions.example.com
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
@@ -78,6 +78,6 @@ tolerations: []
 
 affinity: {}
 config: 
-  clusterName: "microk8s" 
-  controlePlaneAddress: "x.x.x.x" 
-  basicAuthPassword: <Password> 
+  clusterName: "microk8s"
+  controlPlaneAddress: "x.x.x.x"
+  basicAuthPassword: "<Password>"
