@@ -1,0 +1,67 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+
+jobs:
+  markdown-and-links:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Lint Markdown
+        uses: DavidAnson/markdownlint-cli2-action@v20
+        with:
+          globs: |
+            **/*.md
+
+      - name: Check links
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --verbose
+            --no-progress
+            --accept 200,429
+            --exclude-mail
+            .
+          fail: true
+
+  yaml-and-helm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install yamllint
+        run: pip install yamllint
+
+      - name: Lint YAML
+        run: yamllint .
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+
+      - name: Lint permission-manager chart
+        run: helm lint ./permission-manager
+
+      - name: Render permission-manager chart
+        run: helm template permission-manager ./permission-manager -f permission-manager/values.yaml > /tmp/permission-manager-rendered.yaml
+
+      - name: Install kubeconform
+        run: |
+          curl -sSL -o /tmp/kubeconform.tar.gz https://github.com/yannh/kubeconform/releases/download/v0.6.7/kubeconform-linux-amd64.tar.gz
+          tar -xzf /tmp/kubeconform.tar.gz -C /tmp
+          chmod +x /tmp/kubeconform
+
+      - name: Validate rendered manifests
+        run: /tmp/kubeconform -strict -summary /tmp/permission-manager-rendered.yaml
