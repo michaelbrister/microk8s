@@ -81,9 +81,7 @@ kubectl port-forward svc/web -n linkerd-viz 50750:8084
 If you need stable internal access, create an ingress manifest and provide your
 own authentication and TLS. Do not use a hard-coded `admin/admin` secret.
 
-Reference example:
-
-- [`examples/linkerd/ingress-linkerd.yaml`](/Users/mike/Documents/src/microk8s/examples/linkerd/ingress-linkerd.yaml)
+Reference example: `examples/linkerd/ingress-linkerd.yaml`
 
 Example `ingress-linkerd.yaml`:
 

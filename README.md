@@ -18,26 +18,26 @@ Core path:
 
 Optional path:
 
-7. Install Linkerd
-8. Install Permission Manager
-9. Add code-server
+1. Install Linkerd
+2. Install Permission Manager
+3. Add code-server
 
 ## Repository map
 
-- [`argocd/README.md`](/Users/mike/Documents/src/microk8s/argocd/README.md)
-- [`gitea/README.md`](/Users/mike/Documents/src/microk8s/gitea/README.md)
-- [`prometheus/README.md`](/Users/mike/Documents/src/microk8s/prometheus/README.md)
-- [`linkerd/README.md`](/Users/mike/Documents/src/microk8s/linkerd/README.md)
-- [`permission-manager/README.md`](/Users/mike/Documents/src/microk8s/permission-manager/README.md)
-- [`code-server/README.md`](/Users/mike/Documents/src/microk8s/code-server/README.md)
+- [`argocd/README.md`](argocd/README.md)
+- [`gitea/README.md`](gitea/README.md)
+- [`prometheus/README.md`](prometheus/README.md)
+- [`linkerd/README.md`](linkerd/README.md)
+- [`permission-manager/README.md`](permission-manager/README.md)
+- [`code-server/README.md`](code-server/README.md)
 
 Reusable example files:
 
-- [`examples/argocd/ingress-argocd.yaml`](/Users/mike/Documents/src/microk8s/examples/argocd/ingress-argocd.yaml)
-- [`examples/gitea/gitea-values.yaml`](/Users/mike/Documents/src/microk8s/examples/gitea/gitea-values.yaml)
-- [`examples/linkerd/ingress-linkerd.yaml`](/Users/mike/Documents/src/microk8s/examples/linkerd/ingress-linkerd.yaml)
-- [`examples/monitoring/ingress-monitoring.yaml`](/Users/mike/Documents/src/microk8s/examples/monitoring/ingress-monitoring.yaml)
-- [`examples/code-server/ingress-code-server.yaml`](/Users/mike/Documents/src/microk8s/examples/code-server/ingress-code-server.yaml)
+- [`examples/argocd/ingress-argocd.yaml`](examples/argocd/ingress-argocd.yaml)
+- [`examples/gitea/gitea-values.yaml`](examples/gitea/gitea-values.yaml)
+- `examples/linkerd/ingress-linkerd.yaml`
+- `examples/monitoring/ingress-monitoring.yaml`
+- `examples/code-server/ingress-code-server.yaml`
 
 ## Before you start
 
@@ -48,7 +48,8 @@ Decide these values once and reuse them across the runbook:
 - Ingress class, for example `nginx`
 - Storage class, for example `microk8s-hostpath`
 - Whether you need `metallb`
-- Whether you will use self-signed TLS, an internal CA, or no TLS during first bring-up
+- Whether you will use self-signed TLS, an internal CA, or no TLS
+  during first bring-up
 
 Create a simple environment worksheet:
 
@@ -144,14 +145,15 @@ Rules for the rest of the runbook:
 
 Follow:
 
-- [`argocd/README.md`](/Users/mike/Documents/src/microk8s/argocd/README.md)
+- [`argocd/README.md`](argocd/README.md)
 
 Suggested first path:
 
 1. Install Argo CD
 2. Access it with `kubectl port-forward`
 3. Confirm the admin secret works
-4. Only then apply [`examples/argocd/ingress-argocd.yaml`](/Users/mike/Documents/src/microk8s/examples/argocd/ingress-argocd.yaml)
+4. Only then apply
+   [`examples/argocd/ingress-argocd.yaml`](examples/argocd/ingress-argocd.yaml)
 
 Validation checkpoint:
 
@@ -165,11 +167,12 @@ kubectl get ingress -n argocd
 
 Follow:
 
-- [`gitea/README.md`](/Users/mike/Documents/src/microk8s/gitea/README.md)
+- [`gitea/README.md`](gitea/README.md)
 
 Suggested first path:
 
-1. Copy and edit [`examples/gitea/gitea-values.yaml`](/Users/mike/Documents/src/microk8s/examples/gitea/gitea-values.yaml)
+1. Copy and edit
+   [`examples/gitea/gitea-values.yaml`](examples/gitea/gitea-values.yaml)
 2. Install the Helm chart with that file
 3. Confirm pods, PVCs, and services are healthy
 4. Access by port-forward or the chart-managed ingress
@@ -187,7 +190,7 @@ kubectl get ingress -n gitea
 
 Follow:
 
-- [`prometheus/README.md`](/Users/mike/Documents/src/microk8s/prometheus/README.md)
+- [`prometheus/README.md`](prometheus/README.md)
 
 This repo does not yet pin one monitoring install method. For now, the runbook
 assumes you already have Prometheus and Grafana running in `monitoring`.
@@ -195,7 +198,8 @@ assumes you already have Prometheus and Grafana running in `monitoring`.
 Suggested first path:
 
 1. Confirm the monitoring services and ports that actually exist
-2. Update [`examples/monitoring/ingress-monitoring.yaml`](/Users/mike/Documents/src/microk8s/examples/monitoring/ingress-monitoring.yaml)
+2. Update
+   `examples/monitoring/ingress-monitoring.yaml`
 3. Apply the ingress
 
 Validation checkpoint:
@@ -210,19 +214,20 @@ kubectl get ingress -n monitoring
 
 Linkerd:
 
-- [`linkerd/README.md`](/Users/mike/Documents/src/microk8s/linkerd/README.md)
+- [`linkerd/README.md`](linkerd/README.md)
 - Start with `linkerd check --pre`
-- Only expose the dashboard after `linkerd check` and `linkerd viz check` both pass
+- Only expose the dashboard after `linkerd check` and
+  `linkerd viz check` both pass
 
 Permission Manager:
 
-- [`permission-manager/README.md`](/Users/mike/Documents/src/microk8s/permission-manager/README.md)
-- Update [`permission-manager/values.yaml`](/Users/mike/Documents/src/microk8s/permission-manager/values.yaml)
+- [`permission-manager/README.md`](permission-manager/README.md)
+- Update [`permission-manager/values.yaml`](permission-manager/values.yaml)
 - Render the chart before install with `helm template`
 
 code-server:
 
-- [`code-server/README.md`](/Users/mike/Documents/src/microk8s/code-server/README.md)
+- [`code-server/README.md`](code-server/README.md)
 - Use only after you choose and pin a packaging path
 
 ## Recommended install order summary

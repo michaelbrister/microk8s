@@ -45,9 +45,7 @@ kubectl port-forward svc/code-server -n code-server 8080:8080
 
 If you publish through ingress, use a hostname and TLS.
 
-Reference example:
-
-- [`examples/code-server/ingress-code-server.yaml`](/Users/mike/Documents/src/microk8s/examples/code-server/ingress-code-server.yaml)
+Reference example: `examples/code-server/ingress-code-server.yaml`
 
 Example:
 
@@ -110,6 +108,9 @@ after deciding whether the persistent volume should be retained.
 
 ## References
 
-- [code-server upstream](https://github.com/coder/code-server)
-- [linuxserver/code-server image](https://hub.docker.com/r/linuxserver/code-server)
-- [Artifact Hub search for code-server charts](https://artifacthub.io/packages/search?ts_query_web=code-server)
+- code-server upstream:
+  <https://github.com/coder/code-server>
+- linuxserver/code-server image:
+  <https://hub.docker.com/r/linuxserver/code-server>
+- Artifact Hub search for code-server charts:
+  <https://artifacthub.io/packages/search?ts_query_web=code-server>

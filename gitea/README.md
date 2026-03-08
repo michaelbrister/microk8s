@@ -43,7 +43,7 @@ required for ingress and persistence.
 
 Reference example:
 
-- [`examples/gitea/gitea-values.yaml`](/Users/mike/Documents/src/microk8s/examples/gitea/gitea-values.yaml)
+- [`examples/gitea/gitea-values.yaml`](../examples/gitea/gitea-values.yaml)
 
 Example values:
 

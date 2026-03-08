@@ -40,9 +40,7 @@ kubectl get svc -n monitoring
 Create an ingress manifest only after confirming the service names and ports in
 your cluster.
 
-Reference example:
-
-- [`examples/monitoring/ingress-monitoring.yaml`](/Users/mike/Documents/src/microk8s/examples/monitoring/ingress-monitoring.yaml)
+Reference example: `examples/monitoring/ingress-monitoring.yaml`
 
 Example `ingress-monitoring.yaml`:
 

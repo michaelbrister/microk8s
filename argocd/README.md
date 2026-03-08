@@ -29,7 +29,9 @@ kubectl create namespace argocd
 Apply the upstream install manifest:
 
 ```bash
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+ARGOCD_INSTALL_URL="https://raw.githubusercontent.com/argoproj/argo-cd/"
+ARGOCD_INSTALL_URL="${ARGOCD_INSTALL_URL}stable/manifests/install.yaml"
+kubectl apply -n argocd -f "$ARGOCD_INSTALL_URL"
 ```
 
 Wait for the control plane to come up:
@@ -62,9 +64,7 @@ https://127.0.0.1:8080
 If you want stable in-cluster or LAN access, create an ingress manifest and
 replace the hostname and TLS details with values for your environment.
 
-Reference example:
-
-- [`examples/argocd/ingress-argocd.yaml`](/Users/mike/Documents/src/microk8s/examples/argocd/ingress-argocd.yaml)
+Reference example: `examples/argocd/ingress-argocd.yaml`
 
 Example `ingress-argocd.yaml`:
 
@@ -121,7 +121,8 @@ kubectl get ingress -n argocd
 Retrieve the initial admin password:
 
 ```bash
-kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d && echo
+kubectl -n argocd get secret argocd-initial-admin-secret \
+  -o jsonpath="{.data.password}" | base64 -d && echo
 ```
 
 Check the server service:
@@ -154,7 +155,9 @@ kubectl delete -f ingress-argocd.yaml
 Remove Argo CD:
 
 ```bash
-kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+ARGOCD_INSTALL_URL="https://raw.githubusercontent.com/argoproj/argo-cd/"
+ARGOCD_INSTALL_URL="${ARGOCD_INSTALL_URL}stable/manifests/install.yaml"
+kubectl delete -n argocd -f "$ARGOCD_INSTALL_URL"
 kubectl delete namespace argocd
 ```
 

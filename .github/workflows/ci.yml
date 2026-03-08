@@ -55,11 +55,17 @@ jobs:
         run: helm lint ./permission-manager
 
       - name: Render permission-manager chart
-        run: helm template permission-manager ./permission-manager -f permission-manager/values.yaml > /tmp/permission-manager-rendered.yaml
+        run: |
+          helm template permission-manager ./permission-manager \
+            -f permission-manager/values.yaml \
+            > /tmp/permission-manager-rendered.yaml
 
       - name: Install kubeconform
         run: |
-          curl -sSL -o /tmp/kubeconform.tar.gz https://github.com/yannh/kubeconform/releases/download/v0.6.7/kubeconform-linux-amd64.tar.gz
+          KUBECONFORM_URL="https://github.com/yannh/kubeconform/releases/"
+          KUBECONFORM_URL="${KUBECONFORM_URL}download/v0.6.7/"
+          KUBECONFORM_URL="${KUBECONFORM_URL}kubeconform-linux-amd64.tar.gz"
+          curl -sSL -o /tmp/kubeconform.tar.gz "$KUBECONFORM_URL"
           tar -xzf /tmp/kubeconform.tar.gz -C /tmp
           chmod +x /tmp/kubeconform
 

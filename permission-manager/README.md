@@ -7,8 +7,9 @@ validation before it should be treated as production-ready.
 ## Overview
 
 Permission Manager can simplify Kubernetes user and RBAC management. The local
-chart now uses current ingress and autoscaling APIs and removes PodSecurityPolicy-era
-RBAC references, but it still needs environment-specific validation.
+chart now uses current ingress and autoscaling APIs and removes
+PodSecurityPolicy-era RBAC references, but it still needs
+environment-specific validation.
 
 ## Prerequisites
 
@@ -28,7 +29,7 @@ kubectl create namespace permission-manager
 ```
 
 Review and edit the chart values in
-[`permission-manager/values.yaml`](/Users/mike/Documents/src/microk8s/permission-manager/values.yaml)
+[`permission-manager/values.yaml`](values.yaml)
 before installing. At minimum, replace placeholder values for:
 
 - `config.clusterName`
@@ -39,20 +40,22 @@ before installing. At minimum, replace placeholder values for:
 Install the local chart from the repository root:
 
 ```bash
-helm install permission-manager -n permission-manager -f permission-manager/values.yaml ./permission-manager
+helm install permission-manager -n permission-manager \
+  -f permission-manager/values.yaml ./permission-manager
 ```
 
 If you make further changes to the values file:
 
 ```bash
-helm upgrade permission-manager -n permission-manager -f permission-manager/values.yaml ./permission-manager
+helm upgrade permission-manager -n permission-manager \
+  -f permission-manager/values.yaml ./permission-manager
 ```
 
 ## Expose
 
 The chart includes an ingress template. Before enabling external access, verify
 the ingress values in
-[`permission-manager/values.yaml`](/Users/mike/Documents/src/microk8s/permission-manager/values.yaml)
+[`permission-manager/values.yaml`](values.yaml)
 match your cluster.
 
 You should update the ingress settings to use:
@@ -75,7 +78,8 @@ helm status permission-manager -n permission-manager
 Inspect the rendered manifests before trusting the install on a modern cluster:
 
 ```bash
-helm template permission-manager ./permission-manager -f permission-manager/values.yaml
+helm template permission-manager ./permission-manager \
+  -f permission-manager/values.yaml
 ```
 
 ## Operate
