@@ -256,13 +256,9 @@ The stack is only "up" when all of the following are true:
 
 ## What is still left
 
-The repo is now a practical runbook, but these gaps remain:
-
-- No live end-to-end cluster validation has been recorded in the repo
-- Monitoring install is still not pinned to one exact chart and version
-- code-server is still a guided placeholder, not a tested release path
-- No values override files for Argo CD or Linkerd are stored yet
-- No compatibility matrix has been checked in yet
+- code-server is still a guided placeholder
+- No values override files for Argo CD or Linkerd
+- No compatibility matrix
 
 Those are the next steps if you want this to become a reproducible stack, not
 just a usable runbook.
